@@ -17,12 +17,12 @@
     inherit (pkgs) lib;
 
     hostDirs = builtins.attrNames (builtins.readDir ./hosts);
-
-    loadDefaults = (import ./defaults/default.nix) {inherit pkgs lib;};
+    loadDefaults = import ./defaults/default.nix;
+    #loadDefaults = (import ./defaults/default.nix) {inherit pkgs lib;};
   in {
     nixosConfigurations = lib.listToAttrs (lib.concatMap (
         host: let
-          defaults = (import ./defaults/default.nix) {inherit pkgs lib;};
+          defaults = loadDefaults {inherit pkgs lib;};
           hostConf = import ./hosts/${host}/configuration.nix {inherit pkgs lib;} // {};
           merged = lib.recursiveUpdate defaults.configuration hostConf;
         in [
