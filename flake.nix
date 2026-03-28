@@ -16,7 +16,10 @@
     pkgs = import nixpkgs {inherit system;};
     inherit (pkgs) lib;
 
-    hostDirs = builtins.attrNames (builtins.readDir ./hosts);
+    hostDirs = builtins.filter (
+      name:
+        builtins.pathExists ./hosts + "/" + name + "/configuration.nix"
+    ) (builtins.attrNames (builtins.readDir ./hosts));
     loadDefaults = import ./defaults/default.nix;
     #loadDefaults = (import ./defaults/default.nix) {inherit pkgs lib;};
   in {
