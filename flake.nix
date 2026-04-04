@@ -18,15 +18,15 @@
 
     hostDirs = builtins.filter (
       name:
-        builtins.pathExists ./hosts + "/" + name + "/configuration.nix"
+        builtins.pathExists (./hosts + "/${name}/configuration.nix")
     ) (builtins.attrNames (builtins.readDir ./hosts));
+
     loadDefaults = import ./defaults/default.nix;
-    #loadDefaults = (import ./defaults/default.nix) {inherit pkgs lib;};
   in {
     nixosConfigurations = lib.listToAttrs (lib.concatMap (
         host: let
           defaults = loadDefaults {inherit pkgs lib;};
-          hostConf = import ./hosts/${host}/configuration.nix {inherit pkgs lib;} // {};
+          hostConf = import ./hosts/${host}/configuration.nix {inherit pkgs lib;};
           merged = lib.recursiveUpdate defaults.configuration hostConf;
         in [
           {
@@ -34,8 +34,8 @@
             value = nixpkgs.lib.nixosSystem {
               inherit system;
               modules = [
-                (_: merged)
-                (import home-manager.nixosModule)
+                merged
+                home-manager.nixosModule
               ];
               specialArgs = {inherit pkgs;};
             };
