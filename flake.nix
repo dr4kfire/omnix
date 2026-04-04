@@ -1,5 +1,5 @@
 {
-  description = "OMNIX configuration - the only NixOS config you'll ever need";
+  description = "OMNIX configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
@@ -12,36 +12,28 @@
     ...
   }: let
     system = "x86_64-linux";
-
     pkgs = import nixpkgs {inherit system;};
     inherit (pkgs) lib;
 
     hostDirs = builtins.filter (
-      name:
-        builtins.pathExists (./hosts + "/${name}/configuration.nix")
+      name: builtins.pathExists (./hosts + "/${name}/configuration.nix")
     ) (builtins.attrNames (builtins.readDir ./hosts));
-
-    loadDefaults = import ./defaults/default.nix;
   in {
-    nixosConfigurations = lib.listToAttrs (lib.concatMap (
-        host: let
-          defaults = loadDefaults {inherit pkgs lib;};
-          hostConf = import ./hosts/${host}/configuration.nix {inherit pkgs lib;};
-        in [
-          {
-            name = host;
-            value = nixpkgs.lib.nixosSystem {
-              inherit system;
-              modules = [
-                defaults.configuration
-                hostConf
-                home-manager.nixosModule
-              ];
-              specialArgs = {inherit pkgs;};
-            };
-          }
-        ]
-      )
+    nixosConfigurations = lib.listToAttrs (map (host: {
+        name = host;
+        value = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            # 1. Load base defaults
+            ./defaults/default.nix
+            # 2. Load host specific config (automatically overrides defaults)
+            ./hosts/${host}/configuration.nix
+            # 3. Load HM
+            home-manager.nixosModule
+          ];
+          specialArgs = {inherit pkgs;};
+        };
+      })
       hostDirs);
   };
 }

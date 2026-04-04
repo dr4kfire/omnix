@@ -1,10 +1,11 @@
 {
   pkgs,
   lib,
-  overrides ? {},
   ...
-}: let
-  system = import ./system {inherit pkgs lib;};
-  base = {inherit system;};
-in
-  lib.recursiveUpdate base overrides
+}: {
+  imports = [
+    ./system/default.nix
+    ./modules/default.nix
+    ./desktop-env/default.nix
+  ];
+}
