@@ -1,5 +1,5 @@
 {config, ...}: {
-  import = [
+  imports = [
     # You should leave these as is
     ./hardware-configuration.nix
     ./variables.nix
