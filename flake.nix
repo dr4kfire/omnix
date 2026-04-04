@@ -27,14 +27,14 @@
         host: let
           defaults = loadDefaults {inherit pkgs lib;};
           hostConf = import ./hosts/${host}/configuration.nix {inherit pkgs lib;};
-          merged = lib.recursiveUpdate defaults.configuration hostConf;
         in [
           {
             name = host;
             value = nixpkgs.lib.nixosSystem {
               inherit system;
               modules = [
-                merged
+                defaults.configuration
+                hostConf
                 home-manager.nixosModule
               ];
               specialArgs = {inherit pkgs;};
