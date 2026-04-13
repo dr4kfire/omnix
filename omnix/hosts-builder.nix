@@ -1,6 +1,3 @@
-#
-# This file parses configs in ./hosts
-#
 {
   inputs,
   nixpkgs,
@@ -13,6 +10,7 @@
       builtins.pathExists ../hosts + "/" + content_name + "/configuration.nix"
   ) (builtins.attrNames (builtins.readDir ./hosts));
 in {
+  # Special argument that nix builder will use to determine which config to build
   nixosConfigurations = let
     hosts_map = host: let
       host_conf = import ../hosts/${host}/configuration.nix;
