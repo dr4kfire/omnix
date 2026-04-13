@@ -2,6 +2,7 @@
 # This file parses configs in ./hosts
 #
 {
+  inputs,
   nixpkgs,
   home-manager,
   ...
@@ -23,7 +24,14 @@ in {
         value = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
+            {
+              nixpkgs.overlays = [];
+              _module.args = {
+                inherit inputs;
+              };
+            }
             (import home-manager.nixosModule)
+            (import ../hosts/${host}/configuration.nix)
           ];
           specialArgs = {inherit pkgs;};
         };
