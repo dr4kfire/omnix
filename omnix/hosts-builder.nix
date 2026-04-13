@@ -10,12 +10,12 @@
   # List of names of directories that are valid hosts configs
   avaliableHosts = builtins.filter (
     content_name:
-      builtins.pathExists ./hosts + "/" + content_name + "/configuration.nix"
+      builtins.pathExists ../hosts + "/" + content_name + "/configuration.nix"
   ) (builtins.attrNames (builtins.readDir ./hosts));
 in {
   nixosConfigurations = let
     hosts_map = host: let
-      host_conf = import ./hosts/${host}/configuration.nix;
+      host_conf = import ../hosts/${host}/configuration.nix;
       system = host_conf.config.host.system;
       pkgs = import nixpkgs {inherit system;};
     in [
