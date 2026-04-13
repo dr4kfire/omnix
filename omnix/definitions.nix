@@ -1,10 +1,10 @@
 {lib, ...}: {
-  options.var = lib.mkOption {
+  options.users = lib.mkOption {
     type = lib.types.attrs;
     default = {};
   };
 
-  options.main = lib.mkOption {
+  options.host = lib.mkOption {
     type = lib.types.attrs;
     default = {};
   };
