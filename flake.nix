@@ -9,22 +9,5 @@
     home-manager.url = "github:nix-community/home-manager/release-25.11";
   };
 
-  outputs = {
-    nixpkgs,
-    home-manager,
-    ...
-  }: let
-    system = "x86_64-linux";
-
-    pkgs = import nixpkgs {inherit system;};
-    inherit (pkgs) lib;
-
-    hostDirectories =
-      builtins.filter
-      (
-        name:
-          builtins.pathExists ./hosts + "/" + name + "/configuration.nix"
-      ) (builtins.attrNames (builtins.readDir ./hosts));
-  in {
-  };
+  outputs = {};
 }
