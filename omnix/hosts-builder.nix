@@ -36,5 +36,5 @@ in {
       }
     ];
   in
-    builtins.listToAttrs builtins.concatMap hosts_map avaliableHosts;
+    builtins.listToAttrs (builtins.concatMap hosts_map) avaliableHosts;
 }
