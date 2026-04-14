@@ -8,7 +8,7 @@
   avaliableHosts = builtins.filter (
     content_name:
       builtins.pathExists ../hosts + "/" + content_name + "/configuration.nix"
-  ) (builtins.attrNames (builtins.readDir ./hosts));
+  ) (builtins.attrNames (builtins.readDir ../hosts));
 in {
   # Special argument that nix builder will use to determine which config to build
   nixosConfigurations = let
