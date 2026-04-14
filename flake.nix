@@ -13,5 +13,13 @@
     };
   };
 
-  outputs = {self, ...} @ inputs: import ./omnix/hosts-builder.nix (inputs // {inherit self;});
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    ...
+  } @ inputs:
+    import ./omnix/hosts-builder.nix {
+      inherit self inputs nixpkgs home-manager;
+    };
 }
