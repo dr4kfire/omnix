@@ -7,7 +7,7 @@
   # List of names of directories that are valid hosts configs
   avaliableHosts = builtins.filter (
     content_name:
-      builtins.pathExists ../hosts + "/" + content_name + "/configuration.nix"
+      builtins.pathExists (../hosts + "/" + content_name + "/configuration.nix")
   ) (builtins.attrNames (builtins.readDir ../hosts));
 in {
   # Special argument that nix builder will use to determine which config to build
@@ -36,5 +36,5 @@ in {
       }
     ];
   in
-    builtins.listToAttrs (builtins.concatMap hosts_map) avaliableHosts;
+    builtins.listToAttrs (builtins.concatMap hosts_map avaliableHosts);
 }
