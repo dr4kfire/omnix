@@ -13,7 +13,9 @@
     };
   };
 
-  outputs = {...}: {
-    imports = [./omnix/hosts-builder.nix];
+  outputs = {...}: let
+    nixConfigs = import ./omnix/hosts-builder.nix;
+  in {
+    inherit (nixConfigs) nixosConfigurations;
   };
 }
