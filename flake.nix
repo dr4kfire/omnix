@@ -13,5 +13,7 @@
     };
   };
 
-  outputs = ./omnix/hosts-builder.nix;
+  outputs = {...}: {
+    imports = [./omnix/hosts-builder.nix];
+  };
 }
